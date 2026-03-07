@@ -207,10 +207,10 @@ export default function HomePage() {
                 </div>
 
                 {/* Visa Type Filter — right side */}
-                <div className="flex items-center gap-1 bg-white/[0.02] rounded-xl p-1">
+                <div className="flex items-center gap-1.5 bg-white/[0.02] rounded-xl p-1">
                     {filterOptions.map(f => (
                         <button key={f.value} onClick={() => setVisaFilter(f.value)}
-                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${visaFilter === f.value
+                            className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${visaFilter === f.value
                                 ? 'bg-accent-indigo/15 text-accent-indigo shadow-sm' : 'text-text-muted hover:text-text-secondary hover:bg-white/[0.04]'
                                 }`}>
                             {f.label}

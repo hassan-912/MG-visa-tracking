@@ -25,9 +25,9 @@
   --color-info: #3b82f6;
 
   /* ── Text ── */
-  --color-text-primary: #eef2ff;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #475569;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
 
   /* ── Shadows ── */
   --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -270,7 +270,8 @@ body::before {
 
 /* ── Typography helpers ── */
 .gradient-text {
-  background: linear-gradient(135deg, #eef2ff 0%, #7c83f7 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #7c83f7 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

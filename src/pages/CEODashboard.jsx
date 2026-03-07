@@ -50,15 +50,15 @@ const ListItem = memo(function ListItem({ app, active, onClick, onStar, onDelete
             </div>
 
             {/* Action buttons on hover */}
-            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-2 right-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={(e) => { e.stopPropagation(); onStar(app.id) }}
-                    className={`p-1.5 rounded-lg transition-colors ${app.starred ? 'text-amber-400 bg-amber-400/10' : 'text-text-muted hover:text-amber-400 hover:bg-amber-400/10'}`}
+                    className={`p-2 rounded-lg transition-colors ${app.starred ? 'text-amber-400 bg-amber-400/10' : 'text-text-muted hover:text-amber-400 hover:bg-amber-400/10'}`}
                     title={app.starred ? 'Unstar' : 'Star'}>
-                    <HiOutlineStar className="text-xs" />
+                    <HiOutlineStar className="text-sm" />
                 </button>
                 <button onClick={(e) => { e.stopPropagation(); onDelete(app.id) }}
-                    className="p-1.5 rounded-lg text-text-muted hover:text-danger hover:bg-danger/10 transition-colors" title="Delete case">
-                    <HiOutlineTrash className="text-xs" />
+                    className="p-2 rounded-lg text-text-muted hover:text-danger hover:bg-danger/10 transition-colors" title="Delete case">
+                    <HiOutlineTrash className="text-sm" />
                 </button>
             </div>
         </div>
@@ -273,10 +273,10 @@ export default function CEODashboard() {
                                 className="w-full h-9 pl-9 pr-3 rounded-xl bg-white/[0.04] text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent-indigo/30 transition-all" />
                         </div>
 
-                        <div className="flex gap-1 mb-3">
+                        <div className="flex gap-1.5 mb-3">
                             {[{ v: 'all', l: 'All' }, { v: 'schengen', l: '🇪🇺 EU' }, { v: 'usa', l: '🇺🇸 US' }].map(f => (
                                 <button key={f.v} onClick={() => setFilter(f.v)}
-                                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${filter === f.v ? 'bg-accent-indigo/12 text-accent-indigo' : 'text-text-muted hover:text-text-secondary'}`}>
+                                    className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${filter === f.v ? 'bg-accent-indigo/12 text-accent-indigo' : 'text-text-muted hover:text-text-secondary'}`}>
                                     {f.l}
                                 </button>
                             ))}
