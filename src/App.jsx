@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import Navbar from './components/Navbar'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
@@ -29,6 +30,7 @@ export default function App() {
                     </Suspense>
                 </div>
             </main>
+            <Analytics />
         </div>
     )
 }
