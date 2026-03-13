@@ -1,7 +1,6 @@
 export const PROCESS_STEPS = {
     schengen: [
         { key: 'whatsapp_group', label: 'WhatsApp Group', icon: '💬' },
-        { key: 'checklist', label: 'Checklist Sent', icon: '📝' },
         { key: 'employee_follow_up', label: 'Employee Follow Up', icon: '📞' },
         // Existing steps
         { key: 'hotel', label: 'Hotel Reservation', icon: '🏨' },
@@ -14,7 +13,6 @@ export const PROCESS_STEPS = {
     ],
     usa: [
         { key: 'whatsapp_group', label: 'WhatsApp Group', icon: '💬' },
-        { key: 'checklist', label: 'Checklist Sent', icon: '📝' },
         { key: 'employee_follow_up', label: 'Employee Follow Up', icon: '📞' },
         // Existing steps
         { key: 'us', label: 'US Documents', icon: '🇺🇸' },
