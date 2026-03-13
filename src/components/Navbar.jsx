@@ -46,7 +46,7 @@ export default function Navbar() {
 
     return (
         <nav className="sticky top-0 z-50 border-b border-white/[0.05] bg-dark-950/85 backdrop-blur-2xl">
-            <div className="w-full max-w-6xl mx-auto px-6 h-[60px] flex items-center justify-between gap-4">
+            <div className="w-full max-w-7xl mx-auto px-6 h-[60px] flex items-center justify-between gap-4">
                 {/* Logo */}
                 <NavLink to="/" className="flex items-center gap-3 group flex-shrink-0">
                     <img src="/mg-logo.png" alt="MG" className="w-8 h-8 rounded-lg object-cover shadow-lg shadow-accent-indigo/20 group-hover:scale-105 transition-transform" />
@@ -58,7 +58,7 @@ export default function Navbar() {
                 {/* Search — only on home screen */}
                 {isHome && (
                     <div className="relative flex-1 max-w-xs hidden md:block" ref={searchRef}>
-                        <HiOutlineSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
+                        <HiOutlineSearch strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
                         <input
                             type="text" value={query}
                             onChange={e => { setQuery(e.target.value); setShowResults(true) }}

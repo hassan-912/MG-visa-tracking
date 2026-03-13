@@ -59,6 +59,13 @@ const StepNode = memo(function StepNode({ stepDef, stepData, isLast, index, onPr
                     </div>
                 )}
 
+                {stepData.followerName && (
+                    <div className="flex items-center gap-2 mt-2 px-3 py-2 rounded-lg card-inner text-xs max-w-sm">
+                        <span className="text-sm">👤</span>
+                        <span className="truncate text-text-secondary font-medium">{stepData.followerName}</span>
+                    </div>
+                )}
+
                 {inlineOpen && hasFile && (
                     <div className="mt-3 preview-frame anim-scale">
                         {isImg ? <img src={stepData.fileData} alt={stepData.fileName} /> : isPdf ? <iframe src={stepData.fileData} title={stepData.fileName} /> : null}

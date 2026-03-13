@@ -23,40 +23,54 @@ function StatCard({ label, value, icon: Icon, gradient, delay, active, onClick }
     )
 }
 
-function RecentRow({ app, onEdit }) {
+function RecentCard({ app, onEdit }) {
     const pct = getCompletionPercentage(app.steps, app.processType)
     const status = getCaseStatus(app.steps, app.processType)
-    const badgeMap = { done: 'badge-success', active: 'badge-info', in_progress: 'badge-warning' }
-    const labelMap = { done: 'Done', active: 'Active', in_progress: 'In Progress' }
+
+    // Case decision tags
+    const decisionMap = { under_processing: { label: 'Processing', color: 'badge-warning' }, accepted: { label: 'Accepted', color: 'badge-success' }, refused: { label: 'Refused', color: 'badge-danger' } }
+    const statusMap = { done: 'badge-success', active: 'badge-info', in_progress: 'badge-neutral' }
+    const dec = decisionMap[app.decision || 'under_processing']
 
     return (
-        <div className="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-white/[0.03] transition-all group cursor-default">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-indigo/15 to-accent-violet/15 flex items-center justify-center flex-shrink-0 text-lg group-hover:scale-105 transition-transform">
-                {app.processType === 'schengen' ? '🇪🇺' : '🇺🇸'}
-            </div>
-            <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2.5 mb-1">
-                    <span className="text-[13px] font-bold text-text-primary">{app.id}</span>
-                    {app.starred && <span className="text-amber-400 text-xs">★</span>}
-                    <span className={`badge text-[9px] ${badgeMap[status] || 'badge-neutral'}`}>{labelMap[status] || 'New'}</span>
+        <div className="card !border-0 bg-white/[0.02] hover:bg-white/[0.04] p-5 flex flex-col justify-between group transition-all hover:scale-[1.02] cursor-pointer relative" onClick={() => onEdit(app)}>
+            {app.previewRequested && (
+                <div className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-dark-900 shadow-[0_0_8px_rgba(245,158,11,0.5)] z-10" title="Preview Requested by Admin" />
+            )}
+            <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent-indigo/15 to-accent-violet/15 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform flex-shrink-0">
+                    {app.processType === 'schengen' ? '🇪🇺' : app.processType === 'usa' ? '🇺🇸' : app.processType === 'uk' ? '🇬🇧' : '🇨🇦'}
                 </div>
-                <div className="flex items-center gap-3 text-xs text-text-secondary">
-                    <span className="truncate">{app.employeeName}</span>
-                    {app.destination && (
-                        <span className="flex items-center gap-1 text-text-muted">
-                            <HiOutlineLocationMarker className="text-[10px]" /> {app.destination}
-                        </span>
-                    )}
+                <div className="flex flex-col items-end gap-1.5">
+                    <span className={`badge text-[9px] ${statusMap[status] || 'badge-neutral'}`}>{status === 'done' ? 'Done' : status === 'active' ? 'Active' : 'New'}</span>
+                    <span className={`badge text-[8px] ${dec.color}`}>{dec.label}</span>
                 </div>
             </div>
-            <div className="flex items-center gap-3 flex-shrink-0">
-                <div className="w-24 h-1.5 bg-white/[0.04] rounded-full overflow-hidden hidden sm:block">
-                    <div className={`h-full rounded-full transition-all duration-700 ${pct === 100 ? 'bg-success' : 'bg-accent-indigo'}`} style={{ width: `${pct}%` }} />
-                </div>
-                <span className="text-xs font-bold text-text-primary w-10 text-right">{pct}%</span>
-                <button onClick={() => onEdit(app)} className="text-xs font-semibold text-accent-indigo hover:text-accent-indigo/80 transition-colors flex items-center gap-1">
-                    <HiOutlinePencilAlt className="text-xs" /> Edit
-                </button>
+
+            <div className="mb-4 flex-1">
+                <h3 className="text-sm font-bold text-text-primary mb-1 truncate flex items-center gap-1.5">
+                    {app.id} {app.starred && <span className="text-amber-400 text-xs text-shadow-sm leading-none">★</span>}
+                </h3>
+                <p className="text-xs text-text-secondary truncate">{app.employeeName}</p>
+                {app.destination && (
+                    <p className="text-[10px] text-text-muted mt-1.5 flex items-center gap-1 truncate">
+                        <HiOutlineLocationMarker className="text-[10px] flex-shrink-0" /> {app.destination}
+                    </p>
+                )}
+            </div>
+
+            <div className="mt-auto">
+                {app.processType !== 'uk' && app.processType !== 'canada' && (
+                    <div className="flex items-center gap-3">
+                        <div className="flex-1 h-1.5 bg-white/[0.04] rounded-full overflow-hidden">
+                            <div className={`h-full rounded-full transition-all duration-700 ${pct === 100 ? 'bg-success' : 'bg-accent-indigo'}`} style={{ width: `${pct}%` }} />
+                        </div>
+                        <span className="text-xs font-bold text-text-primary w-8 text-right">{pct}%</span>
+                    </div>
+                )}
+                {(app.processType === 'uk' || app.processType === 'canada') && (
+                    <div className="text-[10px] text-warning/80 font-medium italic">Under Development</div>
+                )}
             </div>
         </div>
     )
@@ -128,6 +142,12 @@ function CasePreviewModal({ app, onClose, onGoEdit }) {
                                         <span className="truncate max-w-[100px]">{step.fileName}</span>
                                     </div>
                                 )}
+                                {step.followerName && (
+                                    <div className="flex items-center gap-1 text-[10px] text-text-muted">
+                                        <span className="text-xs">👤</span>
+                                        <span className="truncate max-w-[100px]">{step.followerName}</span>
+                                    </div>
+                                )}
                                 {step.note && (
                                     <span className="text-[10px] text-text-muted italic truncate max-w-[80px]">{step.note}</span>
                                 )}
@@ -191,10 +211,12 @@ export default function HomePage() {
         { value: 'all', label: 'All' },
         { value: 'schengen', label: '🇪🇺 Schengen' },
         { value: 'usa', label: '🇺🇸 USA' },
+        { value: 'uk', label: '🇬🇧 UK' },
+        { value: 'canada', label: '🇨🇦 Canada' },
     ]
 
     return (
-        <div className="w-full max-w-5xl mx-auto flex-1 flex flex-col justify-center py-8 pl-4 sm:pl-8 lg:pl-16">
+        <div className="w-full flex-1 flex flex-col justify-center">
             {/* Hero + Filter Row */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 anim-fade">
                 <div>
@@ -244,8 +266,8 @@ export default function HomePage() {
                 </div>
 
                 {recent.length > 0 ? (
-                    <div className="card !border-0 p-3 bg-white/[0.02] divide-y divide-white/[0.03]">
-                        {recent.map(app => <RecentRow key={app.id} app={app} onEdit={editCase} />)}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {recent.map(app => <RecentCard key={app.id} app={app} onEdit={editCase} />)}
                     </div>
                 ) : (
                     <div className="card !border-0 p-16 text-center bg-white/[0.02]">

@@ -14,7 +14,7 @@ import {
     HiOutlineDownload, HiOutlineShieldCheck,
     HiOutlineViewGrid, HiOutlineLocationMarker,
     HiOutlineTrash, HiOutlineStar, HiOutlineUserAdd,
-    HiOutlineCog, HiOutlineX, HiOutlinePencilAlt
+    HiOutlineCog, HiOutlineX, HiOutlinePencilAlt, HiOutlineExclamationCircle, HiOutlineCheckCircle, HiOutlineLink, HiOutlineXCircle, HiOutlineClock
 } from 'react-icons/hi'
 
 const ListItem = memo(function ListItem({ app, active, onClick, onStar, onDelete }) {
@@ -213,6 +213,14 @@ export default function CEODashboard() {
 
     const editCase = (app) => navigate(`/employee?id=${app.id}`)
 
+    const handleRequestPreview = () => {
+        if (!selected) return
+        const updated = { ...selected, previewRequested: !selected.previewRequested }
+        saveApp(updated)
+        setSelected(updated)
+        toast.success(updated.previewRequested ? 'Preview link requested' : 'Preview request removed')
+    }
+
     const pct = selected ? getCompletionPercentage(selected.steps, selected.processType) : 0
     const getCounts = (app) => {
         const defs = PROCESS_STEPS[app.processType] || []
@@ -232,6 +240,10 @@ export default function CEODashboard() {
                 <div className="flex items-center gap-2">
                     {selected && (
                         <div className="flex items-center gap-2 border-r border-white/[0.06] pr-3 mr-1">
+                            <button onClick={handleRequestPreview} className={`text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 font-bold transition-all ${selected.previewRequested ? 'bg-amber-500/10 text-amber-500 hover:bg-amber-500/20' : 'bg-white/[0.04] text-text-muted hover:text-white hover:bg-white/[0.08]'}`}>
+                                <HiOutlineExclamationCircle className="text-sm" />
+                                {selected.previewRequested ? 'Preview Requested' : 'Request Preview'}
+                            </button>
                             <button onClick={() => editCase(selected)} className="btn-ghost !text-accent-indigo text-xs flex items-center gap-1 font-bold">
                                 <HiOutlinePencilAlt className="text-sm" /> Edit
                             </button>
@@ -267,14 +279,14 @@ export default function CEODashboard() {
 
                         {/* Search + Filter */}
                         <div className="relative mb-3">
-                            <HiOutlineSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-xs" />
+                            <HiOutlineSearch strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-xs" />
                             <input type="text" value={searchId} onChange={e => setSearchId(e.target.value)}
                                 placeholder="Search ID or name..."
                                 className="w-full h-9 pl-9 pr-3 rounded-xl bg-white/[0.04] text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent-indigo/30 transition-all" />
                         </div>
 
-                        <div className="flex gap-1.5 mb-3">
-                            {[{ v: 'all', l: 'All' }, { v: 'schengen', l: '🇪🇺 EU' }, { v: 'usa', l: '🇺🇸 US' }].map(f => (
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                            {[{ v: 'all', l: 'All' }, { v: 'schengen', l: '🇪🇺 EU' }, { v: 'usa', l: '🇺🇸 US' }, { v: 'uk', l: '🇬🇧 UK' }, { v: 'canada', l: '🇨🇦 CA' }].map(f => (
                                 <button key={f.v} onClick={() => setFilter(f.v)}
                                     className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${filter === f.v ? 'bg-accent-indigo/12 text-accent-indigo' : 'text-text-muted hover:text-text-secondary'}`}>
                                     {f.l}
@@ -304,11 +316,23 @@ export default function CEODashboard() {
                     {selected ? (
                         <div className="space-y-4 anim-fade">
                             {/* Info row */}
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                                <InfoCard label="Odoo ID" value={selected.id} icon={HiOutlineShieldCheck} />
-                                <InfoCard label="Category" value={selected.processType === 'schengen' ? '🇪🇺 Schengen' : '🇺🇸 USA'} icon={HiOutlineGlobe} />
+                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                                <InfoCard label="Client Name (ID)" value={selected.id} icon={HiOutlineShieldCheck} />
+                                <InfoCard label="Category" value={selected.processType === 'schengen' ? '🇪🇺 Schengen' : selected.processType === 'usa' ? '🇺🇸 USA' : selected.processType === 'uk' ? '🇬🇧 UK' : '🇨🇦 Canada'} icon={HiOutlineGlobe} />
                                 <InfoCard label="Assigned To" value={selected.employeeName} icon={HiOutlineUser} />
                                 <InfoCard label="Destination" value={selected.destination || '—'} icon={HiOutlineLocationMarker} />
+                                <InfoCard label="Decision" value={selected.decision === 'accepted' ? '✅ Accepted' : selected.decision === 'refused' ? '❌ Refused' : '🔄 Processing'} icon={selected.decision === 'accepted' ? HiOutlineCheckCircle : selected.decision === 'refused' ? HiOutlineXCircle : HiOutlineClock} />
+                                {selected.whatsappLink ? (
+                                    <div className="p-3.5 rounded-xl bg-white/[0.02] flex flex-col justify-center">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <HiOutlineLink className="text-sm text-accent-indigo" />
+                                            <span className="text-[10px] font-bold text-accent-indigo uppercase tracking-wider">WhatsApp Link</span>
+                                        </div>
+                                        <a href={selected.whatsappLink} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-accent-indigo hover:underline truncate" onClick={e => e.stopPropagation()}>Open Chat ↗</a>
+                                    </div>
+                                ) : (
+                                    <InfoCard label="WhatsApp Link" value="Not provided" icon={HiOutlineLink} />
+                                )}
                             </div>
 
                             {/* Progress */}

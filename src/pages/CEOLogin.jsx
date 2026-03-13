@@ -36,7 +36,7 @@ export default function CEOLogin({ onLogin }) {
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Username</label>
                             <div className="relative">
-                                <HiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
+                                <HiOutlineUser strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
                                 <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Enter username" className="input-field pl-9" required />
                             </div>
                         </div>
@@ -44,7 +44,7 @@ export default function CEOLogin({ onLogin }) {
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Password</label>
                             <div className="relative">
-                                <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
+                                <HiOutlineLockClosed strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
                                 <input type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" className="input-field pl-9 pr-10" required />
                                 <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary transition-colors">
                                     {showPw ? <HiOutlineEyeOff className="text-sm" /> : <HiOutlineEye className="text-sm" />}

@@ -19,7 +19,7 @@ export default function App() {
         <div className="min-h-dvh flex flex-col">
             <Navbar />
             <main className="flex-1 flex flex-col items-center w-full px-6 py-8 safe-bottom">
-                <div className="w-full max-w-5xl mx-auto flex-1 flex flex-col">
+                <div className="w-full max-w-7xl mx-auto flex-1 flex flex-col">
                     <Suspense fallback={<Loader />}>
                         <Routes>
                             <Route path="/" element={<HomePage />} />

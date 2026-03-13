@@ -138,14 +138,29 @@ export async function generateWordReport(app, processSteps) {
     }))
 
     // Info section
+    const decisionLabels = {
+        under_processing: 'Under Processing',
+        accepted: 'Accepted',
+        refused: 'Refused'
+    }
+    const catLabels = { schengen: 'Schengen (EU)', usa: 'USA', uk: 'UK', canada: 'Canada' }
+
     const infoItems = [
-        ['Odoo ID', app.id],
+        ['Client Name (ID)', app.id],
         ['Employee', app.employeeName],
-        ['Visa Category', app.processType === 'schengen' ? 'Schengen (EU)' : 'USA'],
+        ['Visa Category', catLabels[app.processType] || app.processType],
         ['Destination', app.destination || 'Not specified'],
-        ['Total Steps', `${defs.length}`],
-        ['Completed', `${done.length} of ${defs.length}`],
+        ['Decision', decisionLabels[app.decision || 'under_processing']],
     ]
+    if (app.whatsappLink) {
+        infoItems.push(['WhatsApp Group', app.whatsappLink])
+    }
+
+    // Only show step stats if there are steps
+    if (defs.length > 0) {
+        infoItems.push(['Total Steps', `${defs.length}`])
+        infoItems.push(['Completed', `${done.length} of ${defs.length}`])
+    }
 
     children.push(makeHeader('Case Information'))
     infoItems.forEach(([label, value]) => {
