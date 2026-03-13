@@ -28,7 +28,7 @@ export default function CEOLogin({ onLogin }) {
                         <HiOutlineLockClosed className="text-accent-indigo text-xl" />
                     </div>
                     <h2 className="text-xl font-extrabold mb-0.5">Admin Access</h2>
-                    <p className="text-sm text-text-secondary">Sign in to the dashboard</p>
+                    <p className="text-sm text-text-secondary">Sign in to managers dashboard</p>
                 </div>
 
                 <div className="card p-6">
