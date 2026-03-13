@@ -79,7 +79,7 @@ const StepCard = memo(function StepCard({ stepDef, stepData, statusValue, noteVa
                 )}
             </div>
 
-            <div className={`grid grid-cols-1 gap-3 ${stepDef.key === 'employee_follow_up' ? '' : 'sm:grid-cols-2'}`}>
+            <div className={`grid grid-cols-1 gap-3 ${['employee_follow_up', 'review', 'whatsapp_group', 'translation', 'application'].includes(stepDef.key) ? '' : 'sm:grid-cols-2'}`}>
                 {stepDef.key === 'employee_follow_up' ? (
                     <div>
                         <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">Follower Name</p>
@@ -96,13 +96,73 @@ const StepCard = memo(function StepCard({ stepDef, stepData, statusValue, noteVa
                             <option value="Moustafa El-Tawil" />
                         </datalist>
                     </div>
+                ) : stepDef.key === 'review' ? (
+                    <div>
+                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">Reviewer Name</p>
+                        <input
+                            type="text"
+                            list="reviewers-list"
+                            value={stepData.followerName || ''}
+                            onChange={e => onFollowerName(stepDef.key, e.target.value)}
+                            placeholder="Type or select name..."
+                            className="input-field text-xs !border-0 !bg-white/[0.04]"
+                        />
+                        <datalist id="reviewers-list">
+                            <option value="Habiba" />
+                            <option value="Passant" />
+                        </datalist>
+                    </div>
+                ) : stepDef.key === 'whatsapp_group' ? (
+                    <div>
+                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">WhatsApp Group URL / ID</p>
+                        <input
+                            type="text"
+                            value={stepData.followerName || ''} // Reusing followerName field for text input storage
+                            onChange={e => onFollowerName(stepDef.key, e.target.value)}
+                            placeholder="Enter WhatsApp link or details..."
+                            className="input-field text-xs !border-0 !bg-white/[0.04]"
+                        />
+                    </div>
+                ) : stepDef.key === 'translation' ? (
+                    <div>
+                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">Translation Status</p>
+                        <div className="relative">
+                            <select
+                                value={stepData.followerName || ''} // Reusing followerName field for dropdown value storage
+                                onChange={e => onFollowerName(stepDef.key, e.target.value)}
+                                className="input-field !appearance-none cursor-pointer pr-8 text-xs !border-0 !bg-white/[0.04]"
+                            >
+                                <option value="" disabled>Select Translation Status...</option>
+                                <option value="Not Sent">Not Sent</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Done">Done</option>
+                            </select>
+                            <HiOutlineChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted text-xs pointer-events-none" />
+                        </div>
+                    </div>
+                ) : stepDef.key === 'application' ? (
+                    <div>
+                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">Checklist Status</p>
+                        <div className="relative">
+                            <select
+                                value={stepData.followerName || ''} // Reusing followerName field for dropdown value storage
+                                onChange={e => onFollowerName(stepDef.key, e.target.value)}
+                                className="input-field !appearance-none cursor-pointer pr-8 text-xs !border-0 !bg-white/[0.04]"
+                            >
+                                <option value="" disabled>Select Checklist Status...</option>
+                                <option value="Not Yet">Not Yet</option>
+                                <option value="Sent">Sent</option>
+                            </select>
+                            <HiOutlineChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted text-xs pointer-events-none" />
+                        </div>
+                    </div>
                 ) : (
                     <div>
                         <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">Upload Document</p>
                         <FileUpload onFileSelect={(n, d, t) => onFile(stepDef.key, n, d, t)} currentFileName={stepData.fileName} />
                     </div>
                 )}
-                {stepDef.key !== 'employee_follow_up' && (
+                {!['employee_follow_up', 'review', 'whatsapp_group', 'translation', 'application'].includes(stepDef.key) && (
                     <div>
                         <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">Status</p>
                         <div className="relative">
