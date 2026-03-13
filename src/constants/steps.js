@@ -7,7 +7,7 @@ export const PROCESS_STEPS = {
         { key: 'hotel', label: 'Hotel Reservation', icon: '🏨' },
         { key: 'travel_plane', label: 'Flight Booking', icon: '✈️' },
         { key: 'motivation', label: 'Motivation Letter', icon: '📝' },
-        { key: 'application', label: 'Application Form', icon: '📋' },
+        { key: 'application', label: 'Checklist', icon: '📋' },
         { key: 'review', label: 'Review', icon: '🔍' },
         { key: 'translation', label: 'Translation', icon: '🌐' },
         { key: 'submitted', label: 'Submitted Application', icon: '✅' },

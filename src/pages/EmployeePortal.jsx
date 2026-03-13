@@ -31,6 +31,35 @@ const StepCard = memo(function StepCard({ stepDef, stepData, statusValue, noteVa
 
     const st = statusTextMap[stepData.status] || statusTextMap.pending
 
+    // Helper to simulate file object for custom inputs
+    const [file, setFile] = useState(() => {
+        if (stepData.fileName && stepData.fileData) {
+            return new File([stepData.fileData], stepData.fileName, { type: stepData.fileType });
+        }
+        return null;
+    });
+
+    useEffect(() => {
+        if (file) {
+            onFile(stepDef.key, file.name, file.name, file.type); // For custom inputs, fileData and fileType can be simplified
+        } else if (stepData.fileName && stepData.fileData) {
+            setFile(new File([stepData.fileData], stepData.fileName, { type: stepData.fileType }));
+        } else {
+            setFile(null);
+        }
+    }, [file, stepDef.key, onFile, stepData.fileName, stepData.fileData, stepData.fileType]);
+
+    const handleFileSelect = (e) => {
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+            onFile(stepDef.key, selectedFile.name, selectedFile, selectedFile.type);
+        } else {
+            setFile(null);
+            onFile(stepDef.key, null, null, null);
+        }
+    };
+
     return (
         <div className={`p-5 rounded-2xl transition-all duration-300 ${bgMap[stepData.status] || 'bg-white/[0.015] hover:bg-white/[0.03]'}`}>
             <div className="flex items-center gap-3 mb-4">
@@ -45,7 +74,7 @@ const StepCard = memo(function StepCard({ stepDef, stepData, statusValue, noteVa
                 </div>
                 {done && (
                     <div className="w-7 h-7 rounded-full bg-success/15 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-3.5 h-3.5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        <svg className="w-3.1 h-3.1 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                     </div>
                 )}
             </div>
@@ -268,21 +297,21 @@ export default function EmployeePortal() {
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Employee Name *</label>
                             <div className="relative">
-                                <HiOutlineUser strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
-                                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Full name" className="input-field !border-0 !bg-white/[0.04] pl-9" />
+                                <HiOutlineUser className="absolute left-0 bottom-2.5 -translate-x-0.1 -translate-y-1/2 text-text-muted text-sm" />
+                                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Procedure name" className="input-field !border-0 !bg-white/[0.04] pl-" />
                             </div>
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Destination</label>
                             <div className="relative">
-                                <HiOutlineLocationMarker strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
+                                <HiOutlineLocationMarker strokeWidth={1.5} className="absolute left-0 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
                                 <input type="text" value={destination} onChange={e => setDestination(e.target.value)} placeholder="Where is this client going?" className="input-field !border-0 !bg-white/[0.04] pl-9" />
                             </div>
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Visa Category</label>
                             <div className="relative">
-                                <HiOutlineGlobe strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
+                                <HiOutlineGlobe strokeWidth={1.5} className="absolute left-0 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
                                 <select
                                     value={procType}
                                     onChange={(e) => !isUpdate && setProcType(e.target.value)}
@@ -299,7 +328,7 @@ export default function EmployeePortal() {
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-bold text-text-muted uppercase tracking-wider">WhatsApp Group Link</label>
                             <div className="relative">
-                                <HiOutlineLink strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm" />
+                                <HiOutlineLink strokeWidth={1.5} className="absolute left-0 bottom-2.5 -translate-x-0.1 -translate-y-1/2 text-text-muted text-sm" />
                                 <input type="text" value={whatsappLink} onChange={e => setWhatsappLink(e.target.value)} placeholder="https://chat.whatsapp.com/..." className="input-field !border-0 !bg-white/[0.04] pl-9" />
                             </div>
                         </div>
